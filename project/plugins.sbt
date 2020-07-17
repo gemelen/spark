@@ -24,7 +24,8 @@ libraryDependencies += "com.puppycrawl.tools" % "checkstyle" % "8.25"
 libraryDependencies += "com.google.guava" % "guava" % "23.0"
 
 // need to make changes to uptake sbt 1.0 support in "com.eed3si9n" % "sbt-assembly" % "1.14.5"
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.11.2")
+// addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.11.2")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.15.0")
 
 addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "5.2.4")
 
@@ -38,13 +39,16 @@ resolvers += Resolver.url("bintray",
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.3.0")
 
 // sbt 1.0.0 support: https://github.com/AlpineNow/junit_xml_listener/issues/6
-addSbtPlugin("com.alpinenow" % "junit_xml_listener" % "0.5.1")
+// addSbtPlugin("com.alpinenow" % "junit_xml_listener" % "0.5.1")
+// FIXME replace with something?
 
 // need to make changes to uptake sbt 1.0 support in "com.eed3si9n" % "sbt-unidoc" % "0.4.1"
-addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.3")
+// addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.3")
+addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.3")
 
 // need to make changes to uptake sbt 1.0 support in "com.cavorite" % "sbt-avro-1-7" % "1.1.2"
-addSbtPlugin("com.cavorite" % "sbt-avro" % "0.3.2")
+// addSbtPlugin("com.cavorite" % "sbt-avro" % "0.3.2")
+addSbtPlugin("com.cavorite" % "sbt-avro" % "2.1.1")
 
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")
 
@@ -53,7 +57,8 @@ libraryDependencies += "org.ow2.asm"  % "asm" % "7.2"
 libraryDependencies += "org.ow2.asm"  % "asm-commons" % "7.2"
 
 // sbt 1.0.0 support: https://github.com/ihji/sbt-antlr4/issues/14
-addSbtPlugin("com.simplytyped" % "sbt-antlr4" % "0.7.13")
+// addSbtPlugin("com.simplytyped" % "sbt-antlr4" % "0.7.13")
+addSbtPlugin("com.simplytyped" % "sbt-antlr4" % "0.8.2")
 
 // Spark uses a custom fork of the sbt-pom-reader plugin which contains a patch to fix issues
 // related to test-jar dependencies (https://github.com/sbt/sbt-pom-reader/pull/14). The source for
@@ -62,4 +67,6 @@ addSbtPlugin("com.simplytyped" % "sbt-antlr4" % "0.7.13")
 // In the long run, we should try to merge our patch upstream and switch to an upstream version of
 // the plugin; this is tracked at SPARK-14401.
 
-addSbtPlugin("org.spark-project" % "sbt-pom-reader" % "1.0.0-spark")
+//addSbtPlugin("org.spark-project" % "sbt-pom-reader" % "1.0.0-spark")
+// https://github.com/scalacenter/sbt-pom-reader
+addSbtPlugin("ch.epfl.scala" % "sbt-pom-reader" % "2.1.0")
