@@ -99,3 +99,8 @@ spark-warehouse/
 
 # For SBT
 .jvmopts
+
+# metals
+.bloop
+.bloop
+.project/metals.sbt
