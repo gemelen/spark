@@ -525,7 +525,7 @@ object SparkParallelTestGrouping {
 }
 
 object Core {
-  import java.lang.Process
+  import scala.sys.process.Process
 
   lazy val settings = Seq(
     resourceGenerators in Compile += Def.task {
@@ -572,6 +572,7 @@ object DockerIntegrationTests {
  */
 object KubernetesIntegrationTests {
   import BuildCommons._
+  import scala.sys.process.Process
 
   val dockerBuild = TaskKey[Unit]("docker-imgs", "Build the docker images for ITs.")
   val runITs = TaskKey[Unit]("run-its", "Only run ITs, skip image build.")
