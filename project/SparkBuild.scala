@@ -28,10 +28,12 @@ import scala.collection.mutable.Stack
 import sbt._
 import sbt.Classpaths.publishTask
 import sbt.Keys._
-import sbtunidoc.Plugin.UnidocKeys.unidocGenjavadocVersion
 import com.etsy.sbt.checkstyle.CheckstylePlugin.autoImport._
 import com.simplytyped.Antlr4Plugin._
-import com.typesafe.sbt.pom.{PomBuild, SbtPomKeys}
+import sbtunidoc.GenJavadocPlugin.autoImport._
+import sbtassembly.AssemblyPlugin.autoImport._
+//import com.typesafe.sbt.pom.{PomBuild, SbtPomKeys}
+import ch.epfl.scala.sbt.pom.{PomBuild, SbtPomKeys}
 import com.typesafe.tools.mima.plugin.MimaKeys
 import org.scalastyle.sbt.ScalastylePlugin.autoImport._
 import org.scalastyle.sbt.Tasks
@@ -147,7 +149,7 @@ object SparkBuild extends PomBuild {
     val in = "scalastyle-config.xml"
     val out = "scalastyle-on-compile.generated.xml"
     val replacements = Map(
-      """customId="println" level="error"""" -> """customId="println" level="warn""""
+      """customId="println" level="error" """ -> """customId="println" level="warn""""
     )
     var contents = Source.fromFile(in).getLines.mkString("\n")
     for ((k, v) <- replacements) {
@@ -219,7 +221,7 @@ object SparkBuild extends PomBuild {
     javaHome := sys.env.get("JAVA_HOME")
       .orElse(sys.props.get("java.home").map { p => new File(p).getParentFile().getAbsolutePath() })
       .map(file),
-    incOptions := incOptions.value.withNameHashing(true),
+    //incOptions := incOptions.value.withNameHashing(true), //because name hashing is always on
     publishMavenStyle := true,
     unidocGenjavadocVersion := "0.16",
 
@@ -523,6 +525,8 @@ object SparkParallelTestGrouping {
 }
 
 object Core {
+  import java.lang.Process
+
   lazy val settings = Seq(
     resourceGenerators in Compile += Def.task {
       val buildScript = baseDirectory.value + "/../build/spark-build-info"
@@ -661,6 +665,8 @@ object OldDeps {
 }
 
 object Catalyst {
+  import com.simplytyped.Antlr4Plugin.autoImport._
+
   lazy val settings = antlr4Settings ++ Seq(
     antlr4Version in Antlr4 := SbtPomKeys.effectivePom.value.getProperties.get("antlr4.version").asInstanceOf[String],
     antlr4PackageName in Antlr4 := Some("org.apache.spark.sql.catalyst.parser"),
@@ -732,8 +738,7 @@ object Hive {
 
 object Assembly {
   import sbtassembly.AssemblyUtils._
-  import sbtassembly.Plugin._
-  import AssemblyKeys._
+  import sbtassembly.AssemblyPlugin.autoImport._
 
   val hadoopVersion = taskKey[String]("The version of hadoop that spark is compiled against.")
 
@@ -767,8 +772,7 @@ object Assembly {
 }
 
 object PySparkAssembly {
-  import sbtassembly.Plugin._
-  import AssemblyKeys._
+  import sbtassembly.AssemblyPlugin.autoImport._
   import java.util.zip.{ZipOutputStream, ZipEntry}
 
   lazy val settings = Seq(
@@ -818,8 +822,10 @@ object PySparkAssembly {
 object Unidoc {
 
   import BuildCommons._
-  import sbtunidoc.Plugin._
-  import UnidocKeys._
+  import sbtunidoc.BaseUnidocPlugin.autoImport._
+  import sbtunidoc.GenJavadocPlugin.autoImport._
+  import sbtunidoc.JavaUnidocPlugin.autoImport._
+  import sbtunidoc.ScalaUnidocPlugin.autoImport._
 
   private def ignoreUndocumentedPackages(packages: Seq[Seq[File]]): Seq[Seq[File]] = {
     packages
