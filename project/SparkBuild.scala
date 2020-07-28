@@ -236,8 +236,11 @@ object SparkBuild extends PomBuild {
     ),
     externalResolvers := resolvers.value,
     otherResolvers := SbtPomKeys.mvnLocalRepository(dotM2 => Seq(Resolver.file("dotM2", dotM2))).value,
-    publishLocalConfiguration in MavenCompile :=
-      new PublishConfiguration(None, "dotM2", packagedArtifacts.value, Seq(), ivyLoggingLevel.value),
+    publishLocalConfiguration in MavenCompile := 
+      PublishConfiguration
+        .withResolverName("dotM2")
+        .withArtifacts(packagedArtifacts.value)
+        .withLogging(ivyLoggingLevel.value)
     publishMavenStyle in MavenCompile := true,
     publishLocal in MavenCompile := publishTask(publishLocalConfiguration in MavenCompile, deliverLocal).value,
     publishLocalBoth := Seq(publishLocal in MavenCompile, publishLocal).dependOn.value,
