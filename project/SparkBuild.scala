@@ -669,9 +669,10 @@ object OldDeps {
 }
 
 object Catalyst {
+  import com.simplytyped.Antlr4Plugin
   import com.simplytyped.Antlr4Plugin.autoImport._
 
-  lazy val settings = antlr4Settings ++ Seq(
+  lazy val settings = Antlr4Plugin.projectSettings ++ Seq(
     antlr4Version in Antlr4 := SbtPomKeys.effectivePom.value.getProperties.get("antlr4.version").asInstanceOf[String],
     antlr4PackageName in Antlr4 := Some("org.apache.spark.sql.catalyst.parser"),
     antlr4GenListener in Antlr4 := true,
