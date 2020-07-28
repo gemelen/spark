@@ -498,12 +498,12 @@ object SparkParallelTestGrouping {
     testGrouping in Test := {
       val tests: Seq[TestDefinition] = (definedTests in Test).value
       val defaultForkOptions = ForkOptions(
-        bootJars = Nil,
         javaHome = javaHome.value,
-        connectInput = connectInput.value,
         outputStrategy = outputStrategy.value,
-        runJVMOptions = (javaOptions in Test).value,
+        bootJars = Vector.empty[java.io.File],
         workingDirectory = Some(baseDirectory.value),
+        runJVMOptions = (javaOptions in Test).value.toVector,
+        connectInput = connectInput.value,
         envVars = (envVars in Test).value
       )
       tests.groupBy(test => testNameToTestGroup(test.name)).map { case (groupName, groupTests) =>
@@ -511,7 +511,7 @@ object SparkParallelTestGrouping {
           if (groupName == DEFAULT_TEST_GROUP) {
             defaultForkOptions
           } else {
-            defaultForkOptions.copy(runJVMOptions = defaultForkOptions.runJVMOptions ++
+            defaultForkOptions.withRunJVMOptions(defaultForkOptions.runJVMOptions ++
               Seq(s"-Djava.io.tmpdir=${baseDirectory.value}/target/tmp/$groupName"))
           }
         }
