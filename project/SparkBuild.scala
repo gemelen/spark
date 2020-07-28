@@ -865,7 +865,7 @@ object Unidoc {
 
   val unidocSourceBase = settingKey[String]("Base URL of source links in Scaladoc.")
 
-  lazy val settings = scalaJavaUnidocSettings ++ Seq (
+  lazy val settings = unidoc.value ++ Seq (
     publish := {},
 
     unidocProjectFilter in(ScalaUnidoc, unidoc) :=
