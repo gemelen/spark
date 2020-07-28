@@ -292,7 +292,8 @@ object SparkBuild extends PomBuild {
       val out = streams.value
 
       def logProblem(l: (=> String) => Unit, f: File, p: xsbti.Problem) = {
-        l(f.toString + ":" + p.position.line.fold("")(_ + ":") + " " + p.message)
+        val jmap = new java.util.function.Function[Integer, String]() {override def apply(i: Integer): String = {i.toString}}
+        l(f.toString + ":" + p.position.line.map[String](jmap.apply).map(_ + ":").orElse("") + " " + p.message)
         l(p.position.lineContent)
         l("")
       }
