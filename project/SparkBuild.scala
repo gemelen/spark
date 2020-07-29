@@ -653,7 +653,7 @@ object ExcludedDependencies {
  */
 object OldDeps {
 
-  lazy val project = Project("oldDeps", file("dev"), settings = oldDepsSettings)
+  lazy val project = Project("oldDeps", file("dev")).settings(oldDepsSettings)
 
   lazy val allPreviousArtifactKeys = Def.settingDyn[Seq[Set[ModuleID]]] {
     SparkBuild.mimaProjects
