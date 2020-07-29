@@ -373,7 +373,7 @@ object SparkBuild extends PomBuild {
   enable(PySparkAssembly.settings)(assembly)
 
   /* Enable unidoc only for the root spark project */
-  enable(ScalaUnidocPlugin.projectSettings)(spark)
+  enable(Unidoc.settings)(spark)
 
   /* Catalyst ANTLR generation settings */
   enable(Catalyst.settings)(catalyst)
@@ -829,10 +829,12 @@ object PySparkAssembly {
 object Unidoc {
 
   import BuildCommons._
+  import sbtunidoc.BaseUnidocPlugin
+  import sbtunidoc.JavaUnidocPlugin
+  import sbtunidoc.ScalaUnidocPlugin
   import sbtunidoc.BaseUnidocPlugin.autoImport._
   import sbtunidoc.GenJavadocPlugin.autoImport._
   import sbtunidoc.JavaUnidocPlugin.autoImport._
-  import sbtunidoc.ScalaUnidocPlugin
   import sbtunidoc.ScalaUnidocPlugin.autoImport._
 
   private def ignoreUndocumentedPackages(packages: Seq[Seq[File]]): Seq[Seq[File]] = {
@@ -870,7 +872,10 @@ object Unidoc {
 
   val unidocSourceBase = settingKey[String]("Base URL of source links in Scaladoc.")
 
-  lazy val settings = ScalaUnidocPlugin.projectSettings ++ Seq (
+  lazy val settings = BaseUnidocPlugin.projectSettings ++
+                      ScalaUnidocPlugin.projectSettings ++
+                      JavaUnidocPlugin.projectSettings ++
+                      Seq (
     publish := {},
 
     unidocProjectFilter in(ScalaUnidoc, unidoc) :=
