@@ -85,6 +85,7 @@ object BuildCommons {
 object SparkBuild extends PomBuild {
 
   import BuildCommons._
+  import sbtunidoc.ScalaUnidocPlugin
   import scala.collection.mutable.Map
 
   val projectsMap: Map[String, Seq[Setting[_]]] = Map.empty
@@ -372,7 +373,7 @@ object SparkBuild extends PomBuild {
   enable(PySparkAssembly.settings)(assembly)
 
   /* Enable unidoc only for the root spark project */
-  enable(Unidoc.settings)(spark)
+  enable(ScalaUnidocPlugin.projectSettings)(spark)
 
   /* Catalyst ANTLR generation settings */
   enable(Catalyst.settings)(catalyst)
@@ -753,7 +754,7 @@ object Assembly {
       sys.props.get("hadoop.version")
         .getOrElse(SbtPomKeys.effectivePom.value.getProperties.get("hadoop.version").asInstanceOf[String])
     },
-    jarName in assembly := {
+    assemblyJarName in assembly := {
       lazy val hdpVersion = hadoopVersion.value
       if (moduleName.value.contains("streaming-kafka-0-10-assembly")
         || moduleName.value.contains("streaming-kinesis-asl-assembly")) {
@@ -762,8 +763,8 @@ object Assembly {
         s"${moduleName.value}-${version.value}-hadoop${hdpVersion}.jar"
       }
     },
-    jarName in (Test, assembly) := s"${moduleName.value}-test-${version.value}.jar",
-    mergeStrategy in assembly := {
+    assemblyJarName in (Test, assembly) := s"${moduleName.value}-test-${version.value}.jar",
+    assemblyMergeStrategy in assembly := {
       case m if m.toLowerCase(Locale.ROOT).endsWith("manifest.mf")
                                                                => MergeStrategy.discard
       case m if m.toLowerCase(Locale.ROOT).matches("meta-inf.*\\.sf$")
@@ -831,6 +832,7 @@ object Unidoc {
   import sbtunidoc.BaseUnidocPlugin.autoImport._
   import sbtunidoc.GenJavadocPlugin.autoImport._
   import sbtunidoc.JavaUnidocPlugin.autoImport._
+  import sbtunidoc.ScalaUnidocPlugin
   import sbtunidoc.ScalaUnidocPlugin.autoImport._
 
   private def ignoreUndocumentedPackages(packages: Seq[Seq[File]]): Seq[Seq[File]] = {
@@ -868,7 +870,7 @@ object Unidoc {
 
   val unidocSourceBase = settingKey[String]("Base URL of source links in Scaladoc.")
 
-  lazy val settings = unidoc.value ++ Seq (
+  lazy val settings = ScalaUnidocPlugin.projectSettings ++ Seq (
     publish := {},
 
     unidocProjectFilter in(ScalaUnidoc, unidoc) :=
