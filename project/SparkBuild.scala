@@ -32,8 +32,7 @@ import com.etsy.sbt.checkstyle.CheckstylePlugin.autoImport._
 import com.simplytyped.Antlr4Plugin._
 import sbtunidoc.GenJavadocPlugin.autoImport._
 import sbtassembly.AssemblyPlugin.autoImport._
-//import com.typesafe.sbt.pom.{PomBuild, SbtPomKeys}
-import ch.epfl.scala.sbt.pom.{PomBuild, SbtPomKeys}
+import com.typesafe.sbt.pom.{PomBuild, SbtPomKeys}
 import com.typesafe.tools.mima.plugin.MimaKeys
 import org.scalastyle.sbt.ScalastylePlugin.autoImport._
 import org.scalastyle.sbt.Tasks
@@ -654,7 +653,7 @@ object ExcludedDependencies {
  */
 object OldDeps {
 
-  lazy val project = Project("oldDeps", file("dev")).settings(oldDepsSettings)
+  lazy val project = Project("oldDeps", file("dev")).settings(oldDepsSettings).disablePlugins(com.typesafe.sbt.pom.PomReaderPlugin)
 
   lazy val allPreviousArtifactKeys = Def.settingDyn[Seq[Set[ModuleID]]] {
     SparkBuild.mimaProjects

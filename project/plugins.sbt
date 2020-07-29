@@ -69,5 +69,4 @@ addSbtPlugin("com.simplytyped" % "sbt-antlr4" % "0.8.2")
 // the plugin; this is tracked at SPARK-14401.
 
 //addSbtPlugin("org.spark-project" % "sbt-pom-reader" % "1.0.0-spark")
-// https://github.com/scalacenter/sbt-pom-reader
-addSbtPlugin("ch.epfl.scala" % "sbt-pom-reader" % "2.1.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-pom-reader" % "2.1.0")
