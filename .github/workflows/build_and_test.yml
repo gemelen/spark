@@ -88,6 +88,7 @@ jobs:
       CONDA_PREFIX: /usr/share/miniconda
       GITHUB_PREV_SHA: ${{ github.event.before }}
       GITHUB_INPUT_BRANCH: ${{ github.event.inputs.target }}
+      SBT_OPTS: -J-Xss4m
     steps:
     - name: Checkout Spark repository
       uses: actions/checkout@v2
